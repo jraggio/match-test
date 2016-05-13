@@ -32,41 +32,39 @@ A zip of the project in a runnable state.
 
 
 --------------------------------
-Assumptions:
-iPhone only in landscape only (might add portrait later and this will probably be easier if I use UICollectionView to display the cards)
 
-Since we have a 4x4 grid, we will have 16 cards, in 8 pairs.  The 8 chosen will vary based on the recent images returned from the API
+Assumptions / Notes:
+iPhone only in portrait only.  UICollectionView and alternate display class would make a landscape version pretty easy and I might add that, but Matt said not to spend too much time on the app.
 
+Since we have a 4x4 grid, we will have 16 cards, in 8 pairs.  The 8 chosen will vary based on the recent images returned from the API that have square images.  I'm assuming they don't all have squares available and I need to check?
 
+Using UICollectionView to help with layout and is a lot cleaner than a bunch of static buttons or images.  This also makes it much easier to expand the game later to support more than 16 cards.
+
+Game flow:
+Put a full screen progress indicator showing that the deck is loading and shuffling (this is when the Flickr api is called and we don't want the user tapping cards yet)
+Start with set of cards dislayed in grid with their backs showing
+Select first card turns it over revealing an image
+Select second card turns it over revealing an image and checks for a match with the first card
+Selecting a card that is already turned over has no effect
+If match, hide the cards after some delay.  This way they can no longer be selected.  Increment the match count
+Check match count to see if it is deck / 2.  If it is display the endgame message with the final score.
+If not a match, increment the wrong pairs count and update the display and after some delay turn them back over again to their backs.  User needs to be able to see what the second card was.
+
+Tapping the deal button will abandon the current game and reshuffle etc.  Ask for confirmation before doing it.  This button should also be unavailable while the deck is loading.
 
 
 
 --------------------------------
+
 Todo:
 Start with a single player variant first and get that to work before considering how to build a 2 player version
-
-A 4x4 grid can be created using constraints.  Not clear if I need to use display classes for portrait vs. landscape.  Probably do since I would probbaly move the score to a different place in each.
-
-If I decide to support larger grids, these would probably be easiest to do with different scenes in the storyboard, though one could see how using dynamic code to do the constraints and layout could be better.  If I only support 2-3 layouts this might be ok?  Another option is to use a UICollectionView to contain the images.  I think I will go with simple buttons for now.
-
-On second thought I think going with the UICollectionView from the start is best.  It allows for future expansion when I decide to support larger decks of cards and will also allow for scrolling for free I think.  It will probably simlify the ayout as well.  Plus it's a good chance to learn how they work.
-
-Create a square card back image using the Showtime Anytime logo
 
 Classes:
 FlickrCard (include an ID from flickr to use as a key, url for card front)
 FlickrCardDeck
 MatchingCardGame
-GameViewController
+CardCell
+ViewController
 
-Welcome screen?
-
-
-
-
-
-
---------------------------------
-Done:
-
+Welcome screen to select game size and number of players once those are supported?  "Quit" link on top of navigation controller to return to the home screen?
 

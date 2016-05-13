@@ -28,11 +28,11 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Card Matching Game" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FLr-Aq-xjV">
                                 <rect key="frame" x="176" y="285" width="248" height="33"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="0.44154590389999998" green="0.50449359900000001" blue="0.76411158379999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="FLr-Aq-xjV" firstAttribute="top" secondItem="5HU-7m-mZ7" secondAttribute="bottom" constant="35" id="4AS-BL-IMJ"/>
                             <constraint firstItem="5HU-7m-mZ7" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="AQ8-jN-hvp"/>

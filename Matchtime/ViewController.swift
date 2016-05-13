@@ -13,7 +13,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let cardReuseIdentifier = "CardCell"
     private let numberOfItemsPerRow = 4
     private let numberOfCards = 16 // game defaults to a 4x4 grid, but bonus items in the challenge may make this variable
+    private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     
+    @IBOutlet weak var cardsCollectionView: UICollectionView!
     @IBOutlet weak var scoreLabel: UILabel!
   
     override func viewDidLoad() {
@@ -42,7 +44,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cardReuseIdentifier, forIndexPath: indexPath) 
         
-        
         return cell
     }
     
@@ -61,9 +62,88 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return CGSize(width: size, height: size)
     }
     
-    @IBAction func dealClicked(sender: AnyObject) {
-        print("Deal clicked")
+    func startActivityIndicator() {
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 50, 50))
+        activityIndicator.frame = CGRectMake(0, 0, screenSize.width, screenSize.height)
+        activityIndicator.center = self.view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        
+        // Change background color and alpha channel here
+        activityIndicator.backgroundColor = UIColor.blackColor()
+        activityIndicator.clipsToBounds = true
+        activityIndicator.alpha = 0.5
+        
+        view.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        UIApplication.sharedApplication().beginIgnoringInteractionEvents()
     }
     
+    func stopActivityIndicator() {
+        self.activityIndicator.stopAnimating()
+        UIApplication.sharedApplication().endIgnoringInteractionEvents()
+    }
+
+    
+    
+    @IBAction func dealClicked(sender: AnyObject) {
+        startActivityIndicator()
+        
+        delayClosure(4.0){
+            self.stopActivityIndicator()
+        }
+        
+        
+        delayClosure(1.0){
+            if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: 0, inSection: 0)){
+                
+                let hidden = cell.hidden
+                
+                if !hidden {
+                    
+                    UIView.animateWithDuration(1,
+                            animations: {
+                                cell.alpha = 0
+                            },
+                            completion: { completed in
+                                cell.hidden = true
+                            }
+                    )
+                    
+                }
+                else{
+                    cell.hidden = false
+                    
+                    UIView.animateWithDuration(1,
+                           animations: {
+                            cell.alpha = 1
+                            }
+                    )
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    /*
+        Executes the given block on the main thread after a specified delay in seconds.
+        This is used to flip cards over afer a specified delay if they match and also if
+        they do not match.  Each uses a different delay.
+     */
+    func delayClosure(delay: Double, closure: () -> Void) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
+    
+       
 }
 
