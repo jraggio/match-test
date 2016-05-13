@@ -45,8 +45,8 @@ Put a full screen progress indicator showing that the deck is loading and shuffl
 Start with set of cards dislayed in grid with their backs showing
 Select first card turns it over revealing an image
 Select second card turns it over revealing an image and checks for a match with the first card
-Selecting a card that is already turned over has no effect
-If match, hide the cards after some delay.  This way they can no longer be selected.  Increment the match count
+Selecting a card that is already turned over, or a card beyond the second has no effect
+If match, hide the cards after some delay.  This way they can no longer be selected.  Increment the match count.
 Check match count to see if it is deck / 2.  If it is display the endgame message with the final score.
 If not a match, increment the wrong pairs count and update the display and after some delay turn them back over again to their backs.  User needs to be able to see what the second card was.
 
@@ -59,12 +59,23 @@ Tapping the deal button will abandon the current game and reshuffle etc.  Ask fo
 Todo:
 Start with a single player variant first and get that to work before considering how to build a 2 player version
 
-Classes:
-FlickrCard (include an ID from flickr to use as a key, url for card front)
-FlickrCardDeck
-MatchingCardGame
-CardCell
-ViewController
+Verify that my function and init naming is standard, ex. 
+
+Card (include an ID from flickr to use as a key, url for card front)
+
+Build the game class with 8 hard coded puppy images prior to adding in the Flickr API
+
+Create 8 cards and them to the array twice each
+
+Shuffle the array
+
+Probably OK to use the synchronous URL calls since I know that all cards will be loaded in a worker thread?
+
+
+--------------------------------
+
+Possible:
 
 Welcome screen to select game size and number of players once those are supported?  "Quit" link on top of navigation controller to return to the home screen?
 
+--------------------------------
