@@ -12,7 +12,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
     private let cardReuseIdentifier = "CardCell"
     private let numberOfItemsPerRow = 4
-    private let numberOfCards = 16 // game defaults to a 4x4 grid, but bonus items in the challenge may make this variable
+    private let numberOfCards = 4 // game defaults to a 4x4 grid, but bonus items in the challenge may make this variable
     private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     private var gameModel:MatchingCardGame?
     
@@ -24,9 +24,11 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         startNewGame()
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -35,8 +37,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func startNewGame(){
-        gameModel = MatchingCardGame(withDeckSize: 16, andDelegate: self)
+        startActivityIndicator()
+        scoreLabel.text = "Building new deck..."
+        gameModel = MatchingCardGame(withDeckSize: self.numberOfCards, andDelegate: self)
         gameModel?.loadDeck()
+        showAllCardBacks()
+        cardsCollectionView.hidden = true
     }
     
     
@@ -51,13 +57,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        // print("Item selected at index: \(indexPath.row)")
-        
         gameModel?.itemSelected(atIndex: indexPath.row)
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cardReuseIdentifier, forIndexPath: indexPath) as!CardCollectionViewCell
         return cell
     }
@@ -79,6 +82,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     // MARK: Utility
+    func showAllCardBacks(){
+        for index in 0..<numberOfCards{
+            if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
+                
+                cell.cardImage.image = UIImage(named:"showtime")
+                
+                UIView.animateWithDuration(0,
+                                           animations: {
+                                            cell.alpha = 1 },
+                                           completion: { completed in
+                                            cell.hidden = false }
+                )
+            }
+        }
+    }
     
     func startActivityIndicator() {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
@@ -123,7 +141,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // MARK: UI Events
     
     @IBAction func dealClicked(sender: AnyObject) {
-    
+        startNewGame()
     }
     
     
@@ -179,33 +197,36 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
             }
             
-            self.scoreLabel.text = "You have \(self.gameModel!.score) misses"
+            self.scoreLabel.text = "Mismatches: \(self.gameModel!.score)"
             self.gameModel?.clearSelected()
         }
         
     }
     
     func gameReady(){
-        print("gameReady called")
-        
+        scoreLabel.text = "Mismatches:"
+        cardsCollectionView.hidden = false
+        stopActivityIndicator()        
     }
     
     func gameOver(){
         
+        let score = gameModel!.score
+        
+        
         let alert = UIAlertController(title: "Game over",
-                                      message: "You finished with: \(gameModel!.score) misses",
+                                      message: "You finished with \(score) mismatch\(score == 1 ? "":"es")",
                                       preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
+            self.startNewGame()
             return
         }))
         
-        self.presentViewController(alert, animated: true, completion: {self.startNewGame()})
+        self.presentViewController(alert, animated: true, completion: nil)
         
-
     }
-    
        
 }
 

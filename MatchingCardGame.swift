@@ -71,19 +71,29 @@ class MatchingCardGame{
     }
     
     
+    /*
+        Load the deck and shuffle it on a worker thread and then notify the UI delegate when done
+     */
     func loadDeck(){
-        // test with puppy images in bundle prior to coding the Flickr parts
-        for i in 1...(deckSize/2){
-            let newCard = Card(withID: "puppyID\(i)", andImageName: "puppy\(i)")
+        let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            sleep(10)
             
-            // we want two copies of every card in the deck
-            deck.append(newCard)
-            deck.append(newCard)
+            // test with puppy images in bundle prior to coding the Flickr parts
+            for i in 1...(self.deckSize/2){
+                let newCard = Card(withID: "puppyID\(i)", andImageName: "puppy\(i)")
+                
+                // we want two copies of every card in the deck
+                self.deck.append(newCard)
+                self.deck.append(newCard)
+            }
+            
+            self.shuffleDeck()
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                self.gameDelegate.gameReady()
+            }
         }
-        
-        shuffleDeck()
-    
-        gameDelegate.gameReady()
         
     }
     

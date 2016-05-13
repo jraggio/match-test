@@ -57,24 +57,22 @@ Tapping the deal button will abandon the current game and reshuffle etc.  Ask fo
 --------------------------------
 
 Todo:
-Start with a single player variant first and get that to work before considering how to build a 2 player version
 
 Verify that my function and init naming is standard, ex. 
 
 Card (include an ID from flickr to use as a key, url for card front)
 
-Build the game class with 8 hard coded puppy images prior to adding in the Flickr API
+loadDeck needs to be called on a worker thread to keep UI responsive even though a full screen activity view will be displayed
 
-Create 8 cards and them to the array twice each
-
-loadDeck needs to be called on a worker thread to keep UI responsive
-
-Shuffle the array
+Use Flickr API in loadDeck instead of hard coded puppy images to rerieve specified number of images (deckSize / 2 are needed)
 
 Probably OK to use the synchronous URL calls since I know that all cards will be loaded in a worker thread?
 
-How to enter function desctiprions such that they are seen in xcode?  Is there a Javadoc equivalent?
+How to enter function descriptions such that they are seen in xcode?  Is there a Javadoc equivalent?
 
+Bonus: Allow for different difficulty levels (larger grids)
+
+Bonus: Add two player option
 
 --------------------------------
 
