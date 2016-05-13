@@ -1,0 +1,72 @@
+The homework for iOS is relatively simple. We want you to build a matching game using the flickr public api. We've provided an api key to use as well as links to the api call we would like you to use and the documentation for the api.
+
+The task is to build a basic memory game. Display a 4x4 grid of the default image of your choice. Allow the user to flip two images at a time to display the images you've fetched. If the images match, leave them flipped over, otherwise flip them back. When the user has matched all the images, display the number of flips it took and allow them to restart the game with new images.
+
+Match game/Memory/Pairs is described as follows:
+Concentration, also known as Match Match, Memory, Pelmanism, Shinkei-suijaku, Pexeso or simply Pairs, is a card game in which all of the cards are laid face down on a surface and two cards are flipped face up over each turn. The object of the game is to turn over pairs of matching cards.
+
+Resources:
+Flickr api key: 5423dbab63f23a62ca4a986e7cbb35e2
+Flickr api docs:
+These are the two calls you'll need:
+https://www.flickr.com/services/api/flickr.photos.getRecent.html
+https://www.flickr.com/services/api/flickr.photos.getSizes.html
+
+Goals:
+All images need to be tagged with "kitten" and you should use the square size
+4x4 grid of images with a placeholder until flipped
+game is tracking and aware of victory state
+must use UIKit not SpriteKit to build and manage game
+single page app
+works in XCode simulator (or on device, but will probably be tested in simulator, which device you build for is not of concern)
+built in Swift
+Retrieve JSON from the api (not XML or JSONP)
+
+Bonus Points:
+2 players
+animations
+larger grids (being able to choose between game size)
+
+Deliverables:
+A zip of the project in a runnable state.
+
+
+--------------------------------
+Assumptions:
+iPhone only in landscape only (might add portrait later and this will probably be easier if I use UICollectionView to display the cards)
+
+Since we have a 4x4 grid, we will have 16 cards, in 8 pairs.  The 8 chosen will vary based on the recent images returned from the API
+
+
+
+
+
+--------------------------------
+Todo:
+Start with a single player variant first and get that to work before considering how to build a 2 player version
+
+A 4x4 grid can be created using constraints.  Not clear if I need to use display classes for portrait vs. landscape.  Probably do since I would probbaly move the score to a different place in each.
+
+If I decide to support larger grids, these would probably be easiest to do with different scenes in the storyboard, though one could see how using dynamic code to do the constraints and layout could be better.  If I only support 2-3 layouts this might be ok?  Another option is to use a UICollectionView to contain the images.  I think I will go with simple buttons for now.
+
+On second thought I think going with the UICollectionView from the start is best.  It allows for future expansion when I decide to support larger decks of cards and will also allow for scrolling for free I think.  It will probably simlify the ayout as well.  Plus it's a good chance to learn how they work.
+
+Create a square card back image using the Showtime Anytime logo
+
+Classes:
+FlickrCard (include an ID from flickr to use as a key, url for card front)
+FlickrCardDeck
+MatchingCardGame
+GameViewController
+
+Welcome screen?
+
+
+
+
+
+
+--------------------------------
+Done:
+
+

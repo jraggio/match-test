@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Matchtime" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +17,81 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="sn7-FN-gxQ">
+                                <rect key="frame" x="0.0" y="20" width="600" height="539"/>
+                                <color key="backgroundColor" red="0.11611103164400398" green="0.54098494764397898" blue="0.14203663902393918" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="20" id="nqy-VP-wEX">
+                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CardCell" id="Jt5-ew-4Lk">
+                                        <rect key="frame" x="20" y="20" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Showtime" translatesAutoresizingMaskIntoConstraints="NO" id="24a-Q6-SWZ">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <constraints>
+                                            <constraint firstItem="24a-Q6-SWZ" firstAttribute="top" secondItem="Jt5-ew-4Lk" secondAttribute="top" id="Olr-q8-rCB"/>
+                                            <constraint firstAttribute="trailing" secondItem="24a-Q6-SWZ" secondAttribute="trailing" id="ULF-YY-6vR"/>
+                                            <constraint firstAttribute="bottom" secondItem="24a-Q6-SWZ" secondAttribute="bottom" id="UUg-KA-gnf"/>
+                                            <constraint firstItem="24a-Q6-SWZ" firstAttribute="leading" secondItem="Jt5-ew-4Lk" secondAttribute="leading" id="t7M-ma-K2T"/>
+                                        </constraints>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Ilj-VI-v7c"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="ccj-p2-2zw"/>
+                                </connections>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZI-DM-eIY">
+                                <rect key="frame" x="549" y="565" width="31" height="30"/>
+                                <state key="normal" title="Deal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="dealClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hgg-w8-h8f"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score goes here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cQE-Zg-2UE">
+                                <rect key="frame" x="20" y="569" width="125" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.16400046742338112" green="0.76411158376963351" blue="0.2006189667024201" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="sn7-FN-gxQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="3zd-sj-c45"/>
+                            <constraint firstItem="cQE-Zg-2UE" firstAttribute="top" secondItem="sn7-FN-gxQ" secondAttribute="bottom" constant="10" id="6N6-FZ-ZcV"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="cQE-Zg-2UE" secondAttribute="bottom" constant="10" id="HNx-9K-E9M"/>
+                            <constraint firstItem="7ZI-DM-eIY" firstAttribute="centerY" secondItem="cQE-Zg-2UE" secondAttribute="centerY" id="QOd-4q-vTN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sn7-FN-gxQ" secondAttribute="trailing" constant="-20" id="V7R-jK-DUm"/>
+                            <constraint firstItem="cQE-Zg-2UE" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="hjb-EJ-juy"/>
+                            <constraint firstItem="sn7-FN-gxQ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="qaW-zu-dDa"/>
+                            <constraint firstItem="7ZI-DM-eIY" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="saA-Ro-YTH"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="scoreLabel" destination="cQE-Zg-2UE" id="EC3-87-J1d"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="299" y="391"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Showtime" width="1024" height="1024"/>
+    </resources>
 </document>
