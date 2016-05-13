@@ -6,8 +6,20 @@
 //  Copyright © 2016 Raggios. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class Card: NSObject {
+    
+    var image: UIImage // should this be optional?
+    var id: String
+    
+    init(withID id:String, andImageName imageName:String){
+        
+        self.id = id
+        self.image = UIImage(named:imageName)!
+        
+    }
+    
+    
 
 }

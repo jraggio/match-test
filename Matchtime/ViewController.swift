@@ -14,6 +14,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let numberOfItemsPerRow = 4
     private let numberOfCards = 16 // game defaults to a 4x4 grid, but bonus items in the challenge may make this variable
     private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    private var gameModel:MatchingCardGame?
+    
     
     @IBOutlet weak var cardsCollectionView: UICollectionView!
     @IBOutlet weak var scoreLabel: UILabel!
@@ -22,12 +24,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        startNewGame()
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func startNewGame(){
+        gameModel = MatchingCardGame(withDeckSize: 16, andDelegate: self)
+        gameModel?.loadDeck()
     }
     
     
@@ -44,13 +53,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         // print("Item selected at index: \(indexPath.row)")
         
-        showCardFrontAtIndex(indexPath.row)
+        gameModel?.itemSelected(atIndex: indexPath.row)
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cardReuseIdentifier, forIndexPath: indexPath) 
-        
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cardReuseIdentifier, forIndexPath: indexPath) as!CardCollectionViewCell
         return cell
     }
     
@@ -115,13 +123,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // MARK: UI Events
     
     @IBAction func dealClicked(sender: AnyObject) {
-        var array = [Int]()
-        array += 0...15
-        showCardBacksAtIndices(array)
-        
-        let game = MatchingCardGame(withDeckSize: 16, andDelegate: self)
-        game.loadDeck()
-        
+    
     }
     
     
@@ -129,18 +131,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func removeCardsAtIndices(indices: [Int]){
         
-        for index in indices{
-            delayClosure(1.0){
+        delayClosure(1.0){
+            for index in indices{
                 if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)){
                     
                     UIView.animateWithDuration(1,
-                                       animations: {
-                                        cell.alpha = 0 },
-                                       completion: { completed in
-                                        cell.hidden = true }
+                                               animations: {
+                                                cell.alpha = 0 },
+                                               completion: { completed in
+                                                cell.hidden = true }
                     )
                 }
             }
+            
+            self.gameModel?.clearSelected()
+            
         }
     }
     
@@ -151,16 +156,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                                       duration: 1,
                                       options: .TransitionFlipFromRight,
                                       animations: {
-                                        cell.cardImage.image = UIImage(named:"puppy1")
-                                      },
+                                        cell.cardImage.image = self.gameModel?.getCard(atIndex: index)?.image                                      },
                                       completion: nil)
             
         }
     }
     
     func showCardBacksAtIndices(indices: [Int]){
-        for index in indices{
-            delayClosure(2.0){
+        
+        delayClosure(2.0){
+            for index in indices{
+                
                 if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
                     
                     UIView.transitionWithView(cell.contentView,
@@ -168,10 +174,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                                               options: .TransitionFlipFromLeft,
                                               animations: {
                                                 cell.cardImage.image = UIImage(named:"showtime")
-                                              },
+                        },
                                               completion: nil)
                 }
             }
+            
+            self.scoreLabel.text = "You have \(self.gameModel!.score) misses"
+            self.gameModel?.clearSelected()
         }
         
     }
@@ -181,6 +190,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
     }
     
+    func gameOver(){
+        
+        let alert = UIAlertController(title: "Game over",
+                                      message: "You finished with: \(gameModel!.score) misses",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+            return
+        }))
+        
+        self.presentViewController(alert, animated: true, completion: {self.startNewGame()})
+        
+
+    }
     
        
 }

@@ -35,7 +35,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Showtime" translatesAutoresizingMaskIntoConstraints="NO" id="24a-Q6-SWZ">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="showtime" translatesAutoresizingMaskIntoConstraints="NO" id="24a-Q6-SWZ">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                                 </imageView>
                                             </subviews>
@@ -96,6 +96,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Showtime" width="1024" height="1024"/>
+        <image name="showtime" width="1024" height="1024"/>
     </resources>
 </document>

@@ -6,44 +6,106 @@
 //  Copyright © 2016 Raggios. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class MatchingCardGame{
     private var deck:[Card]
-    private var deckSize:Int
-    var gameDelegate: MatchingCardGameDelegate
+    let deckSize:Int
+    private let gameDelegate: MatchingCardGameDelegate
+    private var matchCount: Int = 0
+    private var selectedIndices = [Int]()
+    private var missCount = 0
     
-    init (withDeckSize deckSize:Int, andDelegate:MatchingCardGameDelegate){
+    var score: Int {
+        return missCount
+    }
+    
+    
+    init (withDeckSize deckSize:Int, andDelegate delegate:MatchingCardGameDelegate){
         self.deckSize = deckSize
         self.deck = [Card]()
-        self.gameDelegate = andDelegate
+        self.gameDelegate = delegate
+    }
+    
+    /*
+     Can't clear the selected indices until after the controller tells us it has flipped or removed the cards
+     from the prior guess attempt.  Otherwise the user can cheat and tap many images beforre the timer fires 
+     to flip the mismatched pair back over.  They shold only be able to see two ata time.
+    */
+    func clearSelected(){
+        selectedIndices.removeAll()
+    }
+    
+    
+    
+    func itemSelected(atIndex index:Int){
+        // ignore any attempts to select more than 2 cards or a card that is already selected
+        guard (selectedIndices.count < 2 && !selectedIndices.contains(index) ) else { return }
         
-        print(deck.count)
+        // add this index to the selected set and show the card front in UI via delegate
+        selectedIndices.append(index)
+        gameDelegate.showCardFrontAtIndex(index)
+        
+        // if we have two cards now, we need to check for a match
+        if(selectedIndices.count == 2){
+            let c1 = deck[selectedIndices[0]]
+            let c2 = deck[selectedIndices[1]]
+            
+            // we have a match
+            if c1 == c2{
+                gameDelegate.removeCardsAtIndices(selectedIndices)
+                matchCount += 1
+                if matchCount == deckSize / 2{
+                    gameDelegate.gameOver()
+                }
+                
+            }
+            // we don't have a match
+            else{
+                missCount += 1
+                gameDelegate.showCardBacksAtIndices(selectedIndices)
+            }
+            
+        }
+        
     }
     
     
     func loadDeck(){
-        deck.append(Card())
-        deck.append(Card())
+        // test with puppy images in bundle prior to coding the Flickr parts
+        for i in 1...(deckSize/2){
+            let newCard = Card(withID: "puppyID\(i)", andImageName: "puppy\(i)")
+            
+            // we want two copies of every card in the deck
+            deck.append(newCard)
+            deck.append(newCard)
+        }
         
-        print(deck.count)
-
+        shuffleDeck()
+    
         gameDelegate.gameReady()
         
-        
+    }
+    
+    func getCard(atIndex index:Int) -> Card?{
+        if index < deckSize && index >= 0{
+            return deck[index]
+        }
+        else{
+            return nil
+        }        
     }
     
     
     // Fisher-Yates shuffle, https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     private func shuffleDeck(){
-        var temp:[Card] = deck
-        
-        for i in 0..<(temp.count - 1) {
-            let j = Int(arc4random_uniform(UInt32(temp.count - i))) + i
-            swap(&temp[i], &temp[j])
+
+        for i in 0..<(deck.count - 1) {
+            let j = Int(arc4random_uniform(UInt32(deck.count - i))) + i
+            guard i != j else { continue }
+            swap(&deck[i], &deck[j])
         }
-        
-        self.deck = temp
+
        
     }
     
@@ -74,5 +136,10 @@ protocol MatchingCardGameDelegate{
      Called when the game model is finished loading all card images and has shuffled the deck
      */
     func gameReady()
+    
+    /*
+     Called when the game model determined that all pairs have been found
+     */
+    func gameOver()
     
 } // end MatchingCardGameDelegate

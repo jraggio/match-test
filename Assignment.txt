@@ -67,9 +67,13 @@ Build the game class with 8 hard coded puppy images prior to adding in the Flick
 
 Create 8 cards and them to the array twice each
 
+loadDeck needs to be called on a worker thread to keep UI responsive
+
 Shuffle the array
 
 Probably OK to use the synchronous URL calls since I know that all cards will be loaded in a worker thread?
+
+How to enter function desctiprions such that they are seen in xcode?  Is there a Javadoc equivalent?
 
 
 --------------------------------
