@@ -12,7 +12,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
     private let cardReuseIdentifier = "CardCell"
     private let numberOfItemsPerRow = 4
-    private let numberOfCards = 4 // game defaults to a 4x4 grid, but bonus items in the challenge may make this variable
+    private var numberOfCards = 0 // until user selects difficulty
     private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     private var gameModel:MatchingCardGame?
     
@@ -28,7 +28,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        startNewGame()
+        pickGameLevel()
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,13 +36,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         // Dispose of any resources that can be recreated.
     }
     
-    func startNewGame(){
+    func startNewGame(level:Int){
+        cardsCollectionView.hidden = true
+        numberOfCards = level
         startActivityIndicator()
         scoreLabel.text = "Building new deck..."
-        gameModel = MatchingCardGame(withDeckSize: self.numberOfCards, andDelegate: self)
+        gameModel = MatchingCardGame(withDeckSize: numberOfCards, andDelegate: self)
         gameModel?.loadDeck()
-        showAllCardBacks()
-        cardsCollectionView.hidden = true
     }
     
     
@@ -61,7 +61,23 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        // print("cv.cellForItemAtIndexPath caled for \(indexPath.row)")
+        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cardReuseIdentifier, forIndexPath: indexPath) as!CardCollectionViewCell
+        
+        let card = gameModel?.getCard(atIndex: indexPath.row)
+        
+        if card!.isRemoved{
+            cell.alpha = 0
+            cell.hidden = true
+        }
+        else{
+            cell.alpha = 1
+            cell.hidden = false
+        }
+        
+        cell.cardImage.image = card?.image
+        
         return cell
     }
     
@@ -82,22 +98,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     // MARK: Utility
-    func showAllCardBacks(){
-        for index in 0..<numberOfCards{
-            if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
-                
-                cell.cardImage.image = UIImage(named:"showtime")
-                
-                UIView.animateWithDuration(0,
-                                           animations: {
-                                            cell.alpha = 1 },
-                                           completion: { completed in
-                                            cell.hidden = false }
-                )
-            }
-        }
-    }
-    
     func startActivityIndicator() {
         let screenSize: CGRect = UIScreen.mainScreen().bounds
         
@@ -141,7 +141,45 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // MARK: UI Events
     
     @IBAction func dealClicked(sender: AnyObject) {
-        startNewGame()
+        numberOfCards = 4
+        pickGameLevel()
+    }
+    
+    enum Difficulty:Int{
+        case Easy = 4
+        case Medium = 8
+        case Extreme = 16
+    }
+    
+    func pickGameLevel() {
+  
+        let optionMenu = UIAlertController(title: nil, message: "Choose Difficulty", preferredStyle: .ActionSheet)
+        
+  
+        let easyAction = UIAlertAction(title: "Easy (\(Difficulty.Easy.rawValue))", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.startNewGame(Difficulty.Easy.rawValue)
+        })
+  
+        let mediumAction = UIAlertAction(title: "Medium (\(Difficulty.Medium.rawValue))", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.startNewGame(Difficulty.Medium.rawValue)
+        })
+        
+        let extremeAction = UIAlertAction(title: "Extreme (\(Difficulty.Extreme.rawValue))", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            self.startNewGame(Difficulty.Extreme.rawValue)
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        optionMenu.addAction(easyAction)
+        optionMenu.addAction(mediumAction)
+        optionMenu.addAction(extremeAction)
+        optionMenu.addAction(cancelAction)
+
+        
+        self.presentViewController(optionMenu, animated: true, completion: nil)
     }
     
     
@@ -169,12 +207,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func showCardFrontAtIndex(index: Int){
         if let cell = cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
+            let card = gameModel?.getCard(atIndex: index)
             
             UIView.transitionWithView(cell.contentView,
-                                      duration: 1,
+                                      duration: 0.75,
                                       options: .TransitionFlipFromRight,
-                                      animations: {
-                                        cell.cardImage.image = self.gameModel?.getCard(atIndex: index)?.image                                      },
+                                      animations: { cell.cardImage.image = card?.image },
                                       completion: nil)
             
         }
@@ -182,17 +220,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func showCardBacksAtIndices(indices: [Int]){
         
-        delayClosure(2.0){
+        delayClosure(1.5){
             for index in indices{
                 
                 if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
-                    
+                    let card = self.gameModel?.getCard(atIndex: index)
+
                     UIView.transitionWithView(cell.contentView,
                                               duration: 1,
                                               options: .TransitionFlipFromLeft,
-                                              animations: {
-                                                cell.cardImage.image = UIImage(named:"showtime")
-                        },
+                                              animations: { cell.cardImage.image = card?.image },
                                               completion: nil)
                 }
             }
@@ -204,8 +241,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func gameReady(){
-        scoreLabel.text = "Mismatches:"
+        scoreLabel.text = "Mismatches: 0"
         cardsCollectionView.hidden = false
+        
+        // need to reload the data source since the new game may have a different number of cards
+        cardsCollectionView.reloadData()
+
         stopActivityIndicator()        
     }
     
@@ -220,11 +261,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
             self.dismissViewControllerAnimated(true, completion: nil)
-            self.startNewGame()
+            self.pickGameLevel()
             return
         }))
         
-        self.presentViewController(alert, animated: true, completion: nil)
+        // delay this slightly to give the final two cards a little bit of time to fade away
+        delayClosure(2.0){
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
         
     }
        

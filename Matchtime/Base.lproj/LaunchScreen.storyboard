@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Showtime" translatesAutoresizingMaskIntoConstraints="NO" id="5HU-7m-mZ7">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="showtime" translatesAutoresizingMaskIntoConstraints="NO" id="5HU-7m-mZ7">
                                 <rect key="frame" x="200" y="50" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="15R-UT-T6i"/>
@@ -47,6 +47,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Showtime" width="1024" height="1024"/>
+        <image name="showtime" width="1024" height="1024"/>
     </resources>
 </document>

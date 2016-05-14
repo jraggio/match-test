@@ -33,9 +33,17 @@ class MatchingCardGame{
      to flip the mismatched pair back over.  They shold only be able to see two ata time.
     */
     func clearSelected(){
+//        for item in selectedIndices{
+//            // don't want to change the state of any removed cards to unselected, only want to change those that were
+//            // previously selected.
+//            if deck[item].state == Card.CardState.Selected{
+//                deck[item].state = Card.CardState.Unselected
+//            }
+//        }
+        
         selectedIndices.removeAll()
-    }
-    
+        
+    }    
     
     
     func itemSelected(atIndex index:Int){
@@ -44,6 +52,7 @@ class MatchingCardGame{
         
         // add this index to the selected set and show the card front in UI via delegate
         selectedIndices.append(index)
+        deck[index].state = Card.CardState.Selected
         gameDelegate.showCardFrontAtIndex(index)
         
         // if we have two cards now, we need to check for a match
@@ -52,7 +61,9 @@ class MatchingCardGame{
             let c2 = deck[selectedIndices[1]]
             
             // we have a match
-            if c1 == c2{
+            if c1.isEqual(c2){
+                c1.state=Card.CardState.Removed
+                c2.state=Card.CardState.Removed
                 gameDelegate.removeCardsAtIndices(selectedIndices)
                 matchCount += 1
                 if matchCount == deckSize / 2{
@@ -62,6 +73,8 @@ class MatchingCardGame{
             }
             // we don't have a match
             else{
+                c1.state=Card.CardState.Unselected
+                c2.state=Card.CardState.Unselected
                 missCount += 1
                 gameDelegate.showCardBacksAtIndices(selectedIndices)
             }
@@ -77,14 +90,17 @@ class MatchingCardGame{
     func loadDeck(){
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            sleep(10)
+            sleep(1)
             
             // test with puppy images in bundle prior to coding the Flickr parts
             for i in 1...(self.deckSize/2){
-                let newCard = Card(withID: "puppyID\(i)", andImageName: "puppy\(i)")
                 
-                // we want two copies of every card in the deck
+                // create two cards with the same image and id
+                
+                var newCard = Card(withID: "puppyID\(i)", andImageName: "puppy\(i)")
                 self.deck.append(newCard)
+                
+                newCard = Card(withID: "puppyID\(i)", andImageName: "puppy\(i)")
                 self.deck.append(newCard)
             }
             
@@ -102,6 +118,7 @@ class MatchingCardGame{
             return deck[index]
         }
         else{
+            print("illegal getCard() index=\(index) & deckSize=\(deckSize)")
             return nil
         }        
     }

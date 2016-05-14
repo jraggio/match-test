@@ -57,8 +57,8 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="ccj-p2-2zw"/>
                                 </connections>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZI-DM-eIY">
-                                <rect key="frame" x="549" y="564" width="31" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ZI-DM-eIY">
+                                <rect key="frame" x="533" y="564" width="47" height="30"/>
                                 <state key="normal" title="Redeal">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -66,9 +66,10 @@
                                     <action selector="dealClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hgg-w8-h8f"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mismatches:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cQE-Zg-2UE">
-                                <rect key="frame" x="20" y="568" width="98" height="22"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mismatches: 0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cQE-Zg-2UE">
+                                <rect key="frame" x="20" y="568" width="200" height="22"/>
                                 <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="6hd-16-bdH"/>
                                     <constraint firstAttribute="height" constant="22" id="Jo4-1Y-q2v"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
