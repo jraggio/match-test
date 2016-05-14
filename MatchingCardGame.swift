@@ -25,6 +25,7 @@ class MatchingCardGame{
         self.deckSize = deckSize
         self.deck = [Card]()
         self.gameDelegate = delegate
+        self.loadDeck()
     }
     
     /*
@@ -87,7 +88,7 @@ class MatchingCardGame{
     /*
         Load the deck and shuffle it on a worker thread and then notify the UI delegate when done
      */
-    func loadDeck(){
+    private func loadDeck(){
         let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             sleep(1)

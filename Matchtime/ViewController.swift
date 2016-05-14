@@ -41,8 +41,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         numberOfCards = level
         startActivityIndicator()
         scoreLabel.text = "Building new deck..."
-        gameModel = MatchingCardGame(withDeckSize: numberOfCards, andDelegate: self)
-        gameModel?.loadDeck()
+        gameModel = MatchingCardGame(withDeckSize: numberOfCards, andDelegate: self)        
     }
     
     
