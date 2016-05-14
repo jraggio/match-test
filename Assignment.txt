@@ -41,20 +41,18 @@ Will reload images from Flickr each time a new game is started so that we might 
 Using UICollectionView to help with layout and is a lot cleaner than a bunch of static buttons or images.  This also makes it much easier to expand the game later to support more than 16 cards.
 
 Game flow:
-Put a full screen progress indicator showing that the deck is loading and shuffling (this is when the Flickr api is called and we don't want the user tapping cards yet)
-Start with set of cards dislayed in grid with their backs showing
-Select first card turns it over revealing an image
-Select second card turns it over revealing an image and checks for a match with the first card
+Put a full screen activity indicator showing that the deck is loading and shuffling (this is when the Flickr api is called and we don't want the user tapping cards yet)
+Start with set of cards displayed in grid with their backs showing
+Select first card and turn it over revealing an image
+Select second card and turn it over revealing second image and checks for a match with the first card
 Selecting a card that is already turned over, or a card beyond the second has no effect
-If match, hide the cards after some delay.  This way they can no longer be selected.  Increment the match count.
+If match, hide the cards after some delay.  This way they can no longer be selected, or confuse the user.  Increment the match count.
 Check match count to see if it is deck / 2.  If it is display the endgame message with the final score.
-If not a match, increment the wrong pairs count and update the display and after some delay turn them back over again to their backs.  User needs to be able to see what the second card was.
+If not a match, increment the wrong pairs count, update the display, and after some delay turn them back over again to their backs.  User needs to be able to see what the second card was.
+If final match is found, the final score is displayed in an alert and the user is given a choice of difficulty for the next game.
 
 Tapping the deal button will abandon the current game and allow the user to select a new or same difficulty to start a new game
  User may cancel if they choose.  This button should also be unavailable while the deck is loading.
-
-If final match is found, the final score is displayed in an alert and the user is given a choice of difficulty for the next game.
-
 
 --------------------------------
 
@@ -79,6 +77,11 @@ Need an app icon?
 Need 2x and 3x images? Use the web site found on Chris' video if so
 
 Bonus: Add two player option  prob not going to bother with this, but will document how it would have been done
+
+Do not include .git when zipping up to submit?
+
+
+
 
 
 
