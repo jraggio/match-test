@@ -54,21 +54,22 @@ If final match is found, the final score is displayed in an alert and the user i
 Tapping the deal button will abandon the current game and allow the user to select a new or same difficulty to start a new game
  User may cancel if they choose.  This button should also be unavailable while the deck is loading.
 
+The getRecent API call does not appear to support searching for tags, so I used the search API instead and included extras=url_q to include the large square URL for every item
+
 --------------------------------
 
 Todo:
 
 Use Flickr API in loadDeck instead of hard coded puppy images to rerieve specified number of images (deckSize / 2 are needed)
+https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5423dbab63f23a62ca4a986e7cbb35e2&tags=kitten&sort=relevance&safe_search=1&media=photos&extras=url_q&format=json&nojsoncallback=1
+
+Use the first N items retrned or select N at random from the page of 100 that comes back?
 
 Probably OK to use the synchronous URL calls since I know that all cards will be loaded in a worker thread?
 
 I'm assuming they don't all have squares available and I need to check?
 
 Increase the difficulty values (8, 16, 24/32?) once I am no longer using hard coded puppy images - probably safe to assume that there are more than 32 kitten photos? ;-)
-
-Verify that my function and init naming is standard, ex.
-
-How to enter function descriptions such that they are seen in xcode?  Is there a Javadoc equivalent?
 
 Add text label to cells to display the index?  Be helpful to player if need to scroll?
 

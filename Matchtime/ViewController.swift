@@ -181,26 +181,27 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
     
-    
-    // MARK: MatchingCardGameDelegate
+    // MARK:-
+    // MARK:MatchingCardGameDelegate
     
     func removeCardsAtIndices(indices: [Int]){
         
         delayClosure(1.0){
             for index in indices{
-                if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)){
+                if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
+                    let card = self.gameModel?.getCard(atIndex: index)
                     
-                    UIView.animateWithDuration(1,
-                                               animations: {
-                                                cell.alpha = 0 },
-                                               completion: { completed in
-                                                cell.hidden = true }
-                    )
-                }
+                    UIView.transitionWithView(cell.contentView,
+                                              duration: 1,
+                                              options: .TransitionFlipFromLeft,
+                                              animations: {
+                                                cell.alpha = 0.35
+                                                cell.cardImage.image = card?.image },
+                                              completion: nil)            }
+                
+                self.gameModel?.clearSelected()
+                
             }
-            
-            self.gameModel?.clearSelected()
-            
         }
     }
     

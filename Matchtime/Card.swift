@@ -8,13 +8,22 @@
 
 import UIKit
 
+/**
+ Card represents one of the cards in the Matching Game.
+ */
 class Card: NSObject {
     
     private var cardFrontImage: UIImage
     private var id: String
-    private let cardBackImage = UIImage(named:"showtime")
+    private let cardBackImage = UIImage(named:"showtime")!
     var state: CardState = .Unselected
-    
+   
+    /**
+     The three possible states of card in the game
+     - Selected: When the card's image is displayed face up
+     - Unselected: When the card is placed face down, showing the back
+     - Removed: When the card was part of amatched pair it is removed from the game screen
+     */
     enum CardState{
         case Selected
         case Unselected
@@ -22,11 +31,11 @@ class Card: NSObject {
     }
     
     var image:UIImage{
-        if state == .Unselected{
-            return cardBackImage!
+        if state == .Selected{
+            return cardFrontImage
         }
         else{
-            return cardFrontImage
+            return cardBackImage
         }
     }
     

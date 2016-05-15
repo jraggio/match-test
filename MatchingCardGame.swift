@@ -28,12 +28,15 @@ class MatchingCardGame{
         self.loadDeck()
     }
     
-    /*
-     Can't clear the selected indices until after the controller tells us it has flipped or removed the cards
+    /**
+     Game Delegates use this method to indicate that the game should no longer track previously selected items
+     
+     Can't clear the selected indices in the model until after the controller tells us it has flipped or removed the cards
      from the prior guess attempt.  Otherwise the user can cheat and tap many images beforre the timer fires 
      to flip the mismatched pair back over.  They shold only be able to see two ata time.
     */
     func clearSelected(){
+        // FIXME: Pretty sure that I don't need this
 //        for item in selectedIndices{
 //            // don't want to change the state of any removed cards to unselected, only want to change those that were
 //            // previously selected.
@@ -47,9 +50,15 @@ class MatchingCardGame{
     }    
     
     
+    /**
+     Game delegates use this method to inform the model when a card is selected.  The model will determine
+     if the item selected is valid or not.  It will then enforce the game rules to see if there was a match etc.
+     The model will call back tot he delegate using methods defined in the MatchingCardGameDelegate protocol
+     so that thye may update the UI based on changes in the game state.
+     */
     func itemSelected(atIndex index:Int){
         // ignore any attempts to select more than 2 cards or a card that is already selected
-        guard (selectedIndices.count < 2 && !selectedIndices.contains(index) ) else { return }
+        guard (deck[index].state != .Removed && selectedIndices.count < 2 && !selectedIndices.contains(index) ) else { return }
         
         // add this index to the selected set and show the card front in UI via delegate
         selectedIndices.append(index)
@@ -85,7 +94,7 @@ class MatchingCardGame{
     }
     
     
-    /*
+    /**
         Load the deck and shuffle it on a worker thread and then notify the UI delegate when done
      */
     private func loadDeck(){
@@ -114,6 +123,11 @@ class MatchingCardGame{
         
     }
     
+    /**
+     Returns a Card at a given index
+     - parameter index: The index of the card to retrieve from the deck
+     - returns: The desired Card
+    */
     func getCard(atIndex index:Int) -> Card?{
         if index < deckSize && index >= 0{
             return deck[index]
@@ -125,7 +139,7 @@ class MatchingCardGame{
     }
     
     
-    // Fisher-Yates shuffle, https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+    /// [Fisher-Yates shuffle](https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle)
     private func shuffleDeck(){
 
         for i in 0..<(deck.count - 1) {
@@ -145,27 +159,27 @@ class MatchingCardGame{
  */
 
 protocol MatchingCardGameDelegate{
-    /*
+    /**
      Called when there was a match found in the game and the cards in question will now be hidden
      */
     func removeCardsAtIndices(indices: [Int])
     
-    /*
+    /**
      Called when the user selects a card in the UI and the model determines that its front should be shown
      */
     func showCardFrontAtIndex(index: Int)
     
-    /*
+    /**
      Called when a match was not found in the game and the cards in question will now be turned back over to their backs
      */
     func showCardBacksAtIndices(indices: [Int])
     
-    /*
+    /**
      Called when the game model is finished loading all card images and has shuffled the deck
      */
     func gameReady()
     
-    /*
+    /**
      Called when the game model determined that all pairs have been found
      */
     func gameOver()
