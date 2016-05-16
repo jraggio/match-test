@@ -13,6 +13,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let cardReuseIdentifier = "CardCell"
     private let numberOfItemsPerRow = 4
     private var numberOfCards = 0 // until user selects difficulty
+    private let removedAlpha = 0.20 // used to dim the matched cards
     private var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
     private var gameModel:MatchingCardGame?
     
@@ -64,18 +65,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cardReuseIdentifier, forIndexPath: indexPath) as!CardCollectionViewCell
         
-        let card = gameModel?.getCard(atIndex: indexPath.row)
-        
-        if card!.isRemoved{
-            cell.alpha = 0
-            cell.hidden = true
+        if let card = gameModel?.getCard(atIndex: indexPath.row){
+            
+            if card.isRemoved{
+                cell.alpha = CGFloat(removedAlpha)
+            }
+            else{
+                cell.alpha = 1
+            }
+            
+            cell.cardImage.image = card.image
+            cell.cardLabel.text = String(indexPath.row + 1)
         }
-        else{
-            cell.alpha = 1
-            cell.hidden = false
-        }
-        
-        cell.cardImage.image = card?.image
         
         return cell
     }
@@ -145,9 +146,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     enum Difficulty:Int{
-        case Easy = 4
-        case Medium = 8
-        case Extreme = 16
+        case Easy = 8
+        case Medium = 16
+        case Extreme = 32
     }
     
     func pickGameLevel() {
@@ -189,15 +190,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         delayClosure(1.0){
             for index in indices{
                 if let cell = self.cardsCollectionView.cellForItemAtIndexPath(NSIndexPath(forRow: index, inSection: 0)) as?CardCollectionViewCell{
-                    let card = self.gameModel?.getCard(atIndex: index)
                     
-                    UIView.transitionWithView(cell.contentView,
-                                              duration: 1,
-                                              options: .TransitionFlipFromLeft,
-                                              animations: {
-                                                cell.alpha = 0.35
-                                                cell.cardImage.image = card?.image },
-                                              completion: nil)            }
+                    UIView.animateWithDuration(1,
+                                               animations: {
+                                                cell.alpha = CGFloat(self.removedAlpha) },
+                                               completion: nil)
+                }
                 
                 self.gameModel?.clearSelected()
                 
@@ -234,7 +232,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
             }
             
-            self.scoreLabel.text = "Mismatches: \(self.gameModel!.score)"
+            self.scoreLabel.text = "Mismatches: \(self.gameModel!.matchCount)"
             self.gameModel?.clearSelected()
         }
         
@@ -252,11 +250,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func gameOver(){
         
-        let score = gameModel!.score
+        let score = gameModel?.matchCount
         
-        
-        let alert = UIAlertController(title: "Game over",
-                                      message: "You finished with \(score) mismatch\(score == 1 ? "":"es")",
+        let alert = UIAlertController(title: "All matches found",
+                                      message: "You finished with \(score!) mismatch\(score == 1 ? "":"es")",
                                       preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
@@ -269,6 +266,24 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         delayClosure(2.0){
             self.presentViewController(alert, animated: true, completion: nil)
         }
+        
+    }
+    
+    func gameInitFailure(){
+        
+        let alert = UIAlertController(title: "Error",
+                                      message: "Unable to load the card deck from Flickr",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .Default, handler: { action in
+            self.dismissViewControllerAnimated(true, completion: nil)
+            self.pickGameLevel()
+            return
+        }))
+
+        stopActivityIndicator()
+        
+        self.presentViewController(alert, animated: true, completion: nil)
         
     }
        

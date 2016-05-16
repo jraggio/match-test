@@ -31,11 +31,12 @@ class Card: NSObject {
     }
     
     var image:UIImage{
-        if state == .Selected{
-            return cardFrontImage
+        
+        if state == .Unselected{
+            return cardBackImage
         }
         else{
-            return cardBackImage
+            return cardFrontImage
         }
     }
     
@@ -53,7 +54,7 @@ class Card: NSObject {
         let data = NSData(contentsOfURL: imageURL)
         self.cardFrontImage = UIImage(data: data!)!
         
-        // todo show an error or set a default image of some sort if URL fails to produce an image
+        // TODO: show an error or set a default image of some sort if URL fails to produce an image
     }
     
     override func isEqual(object: AnyObject?) -> Bool {

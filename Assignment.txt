@@ -71,8 +71,6 @@ I'm assuming they don't all have squares available and I need to check?
 
 Increase the difficulty values (8, 16, 24/32?) once I am no longer using hard coded puppy images - probably safe to assume that there are more than 32 kitten photos? ;-)
 
-Add text label to cells to display the index?  Be helpful to player if need to scroll?
-
 Need an app icon?
 
 Need 2x and 3x images? Use the web site found on Chris' video if so

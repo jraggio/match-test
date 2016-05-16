@@ -22,33 +22,48 @@
                                 <rect key="frame" x="0.0" y="20" width="600" height="538"/>
                                 <color key="backgroundColor" red="0.32097468017838832" green="0.38915042457133309" blue="0.54098494764397898" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="20" minimumInteritemSpacing="20" id="nqy-VP-wEX">
-                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="itemSize" width="243" height="247"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CardCell" id="Jt5-ew-4Lk" customClass="CardCollectionViewCell" customModule="Matchtime" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="20" width="100" height="100"/>
+                                        <rect key="frame" x="20" y="20" width="243" height="247"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="243" height="247"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="showtime" translatesAutoresizingMaskIntoConstraints="NO" id="24a-Q6-SWZ">
-                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="243" height="247"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.40000000000000002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="16" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dlp-se-lFa">
+                                                    <rect key="frame" x="0.0" y="0.0" width="14" height="14"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="14" id="GFU-1D-out"/>
+                                                        <constraint firstAttribute="height" constant="14" id="IrF-Zm-XlL"/>
+                                                    </constraints>
+                                                    <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="10"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="24a-Q6-SWZ" firstAttribute="top" secondItem="Jt5-ew-4Lk" secondAttribute="top" id="Olr-q8-rCB"/>
-                                            <constraint firstAttribute="trailing" secondItem="24a-Q6-SWZ" secondAttribute="trailing" id="ULF-YY-6vR"/>
-                                            <constraint firstAttribute="bottom" secondItem="24a-Q6-SWZ" secondAttribute="bottom" id="UUg-KA-gnf"/>
-                                            <constraint firstItem="24a-Q6-SWZ" firstAttribute="leading" secondItem="Jt5-ew-4Lk" secondAttribute="leading" id="t7M-ma-K2T"/>
+                                            <constraint firstAttribute="trailing" secondItem="24a-Q6-SWZ" secondAttribute="trailing" id="0Zx-fD-P8I"/>
+                                            <constraint firstItem="24a-Q6-SWZ" firstAttribute="top" secondItem="Jt5-ew-4Lk" secondAttribute="top" id="4JW-do-3yv"/>
+                                            <constraint firstItem="24a-Q6-SWZ" firstAttribute="leading" secondItem="Jt5-ew-4Lk" secondAttribute="leading" id="6Fn-C4-TI6"/>
+                                            <constraint firstItem="dlp-se-lFa" firstAttribute="top" secondItem="Jt5-ew-4Lk" secondAttribute="topMargin" constant="-8" id="LTv-hP-PB0"/>
+                                            <constraint firstItem="dlp-se-lFa" firstAttribute="leading" secondItem="Jt5-ew-4Lk" secondAttribute="leadingMargin" constant="-8" id="Sq6-6c-469"/>
+                                            <constraint firstAttribute="bottom" secondItem="24a-Q6-SWZ" secondAttribute="bottom" id="uho-XQ-V88"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="cardImage" destination="24a-Q6-SWZ" id="Nbg-bP-4kS"/>
+                                            <outlet property="cardLabel" destination="dlp-se-lFa" id="i0C-QB-c04"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
