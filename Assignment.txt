@@ -75,6 +75,8 @@ Add an app icon
 
 ASdd 2x and 3x images
 
+Add more comments in markup format for classes, methods, and properties.
+
 Bonus: Add two player option - chose not to do this as Chris said not to spend too much time on the app.  It would not be too difficult.  Instead of counting the number of mismatches, the model would count how many matches each player had.  The delegate protocol would be expanded to include methods for prompting the next player and showing each score.  The UI would need to change to allow the user to select the number of players.
 
 
