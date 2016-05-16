@@ -34,50 +34,50 @@ A zip of the project in a runnable state.
 --------------------------------
 
 Assumptions / Notes:
-iPhone only and in portrait only.  UICollectionView and alternate display class would make a landscape version pretty easy and I might add that, but Matt said not to spend too much time on the app.
+iPhone only and in portrait only.  UICollectionView and alternate display class would make a landscape version pretty easy and I could add that, but Matt said not to spend too much time on the app.
 
 Will reload images from Flickr each time a new game is started so that we might get new images as some are added.  I'd imagine kittens are popular.  In other words, not caching the images on purpose.
 
-Using UICollectionView to help with layout and is a lot cleaner than a bunch of static buttons or images.  This also makes it much easier to expand the game later to support more than 16 cards.
+Using UICollectionView to help with layout and is a lot cleaner than a bunch of static buttons or images.  This also makes it much easier to support alternate card counts.
+
+Using synchronous URL get calls since I know that cards will be loaded in a worker thread.  I could still use asynchronour loads and benefit from some parallization, but files are small so it was not wroth it.
+
+The "getRecent" API call does not appear to support searching for tags, so I used the "search" API instead and included extras=url_q to include the large square URL for every item
+
+It looks like all images do include a square image URL in the feed so I am not checking when creating each card.
+
+I included labels on the card to display their index to make the game a little easier to play when scrolling was introduced.
+
 
 Game flow:
-Put a full screen activity indicator showing that the deck is loading and shuffling (this is when the Flickr api is called and we don't want the user tapping cards yet)
+Player selects difficulty from an ActionSheet
+Put a full screen activity indicator showing that the deck is loading and shuffling (this is when the Flickr api is called in a worker thread)
 Start with set of cards displayed in grid with their backs showing
-Select first card and turn it over revealing an image
-Select second card and turn it over revealing second image and checks for a match with the first card
-Selecting a card that is already turned over, or a card beyond the second has no effect
-If match, hide the cards after some delay.  This way they can no longer be selected, or confuse the user.  Increment the match count.
+User selects first card and it turns over revealing an image
+User selects second card and it turns over revealing second image and checks for a match with the first card
+Selecting a card that is already turned over, or part of a previous match, or a card beyond the second has no effect
+If a match, dim the cards after some delay.  This way they can no longer be selected, or confuse the user.  Increment the match count.
 Check match count to see if it is deck / 2.  If it is display the endgame message with the final score.
 If not a match, increment the wrong pairs count, update the display, and after some delay turn them back over again to their backs.  User needs to be able to see what the second card was.
 If final match is found, the final score is displayed in an alert and the user is given a choice of difficulty for the next game.
 
 Tapping the deal button will abandon the current game and allow the user to select a new or same difficulty to start a new game
- User may cancel if they choose.  This button should also be unavailable while the deck is loading.
+ User may cancel if they choose.  This button is unavailable while the deck is loading.
 
-The getRecent API call does not appear to support searching for tags, so I used the search API instead and included extras=url_q to include the large square URL for every item
 
 --------------------------------
 
-Todo:
+Possible future work
 
-Use Flickr API in loadDeck instead of hard coded puppy images to rerieve specified number of images (deckSize / 2 are needed)
-https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5423dbab63f23a62ca4a986e7cbb35e2&tags=kitten&sort=relevance&safe_search=1&media=photos&extras=url_q&format=json&nojsoncallback=1
+Select N/2 at random from the page of 100 images that comes back to add some variety to the game
 
-Use the first N items retrned or select N at random from the page of 100 that comes back?
+Add an app icon
 
-Probably OK to use the synchronous URL calls since I know that all cards will be loaded in a worker thread?
+ASdd 2x and 3x images
 
-I'm assuming they don't all have squares available and I need to check?
+Bonus: Add two player option - chose not to do this as Chris said not to spend too much time on the app.  It would not be too difficult.  Instead of counting the number of mismatches, the model would count how many matches each player had.  The delegate protocol would be expanded to include methods for prompting the next player and showing each score.  The UI would need to change to allow the user to select the number of players.
 
-Increase the difficulty values (8, 16, 24/32?) once I am no longer using hard coded puppy images - probably safe to assume that there are more than 32 kitten photos? ;-)
 
-Need an app icon?
-
-Need 2x and 3x images? Use the web site found on Chris' video if so
-
-Bonus: Add two player option  prob not going to bother with this, but will document how it would have been done
-
-Do not include .git when zipping up to submit?
 
 
 

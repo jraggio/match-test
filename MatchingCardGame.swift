@@ -12,9 +12,9 @@ class MatchingCardGame{
     private var deck:[Card]
     let deckSize:Int
     private let gameDelegate: MatchingCardGameDelegate
-    private(set) var matchCount: Int = 0
+    private var matchCount: Int = 0
     private var selectedIndices = [Int]()
-    private var missCount = 0
+    private (set) var missCount = 0
     
     let flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=5423dbab63f23a62ca4a986e7cbb35e2&tags=kitten&sort=relevance&safe_search=1&media=photos&extras=url_q&format=json&nojsoncallback=1"
     

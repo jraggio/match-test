@@ -232,7 +232,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
             }
             
-            self.scoreLabel.text = "Mismatches: \(self.gameModel!.matchCount)"
+            self.scoreLabel.text = "Mismatches: \(self.gameModel?.missCount)"
             self.gameModel?.clearSelected()
         }
         
@@ -250,7 +250,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func gameOver(){
         
-        let score = gameModel?.matchCount
+        let score = gameModel?.missCount
         
         let alert = UIAlertController(title: "All matches found",
                                       message: "You finished with \(score!) mismatch\(score == 1 ? "":"es")",
